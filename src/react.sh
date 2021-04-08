@@ -8,7 +8,7 @@ function reactBuild {
   yarnExitCode=${?}
   
   # Exit code of 0 indicates success. Print the output and exit.
-  if [ ${yarnExitCode} -neq 0 ]; then
+  if [ ${yarnExitCode} -ne 0 ]; then
     echo "react-build: error: yarn install failed"
     echo "${yarnOutput}"
     echo
@@ -19,7 +19,7 @@ function reactBuild {
   yarnExitCode=${?}
 
   # Exit code of 0 indicates success. Print the output and exit.
-  if [ ${yarnExitCode} -neq 0 ]; then
+  if [ ${yarnExitCode} -ne 0 ]; then
     echo "react-build: error: yarn run build failed"
     echo "${yarnOutput}"
     echo
