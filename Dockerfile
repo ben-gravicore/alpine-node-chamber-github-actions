@@ -1,6 +1,6 @@
 FROM gravicore/alpine-node-chamber:latest
 
-RUN ["/bin/sh", "-c", "apk add --update --no-cache bash ca-certificates curl git jq openssh autoreconf"]
+RUN ["/bin/sh", "-c", "apk add --update --no-cache bash ca-certificates curl git jq openssh autoconf"]
 
 COPY ["src", "/src/"]
 
