@@ -17,8 +17,8 @@ function hasPrefix {
 
 function parseInputs {
   # Required inputs
-  if [ "${INPUT_GRAVICORE_ACTIONS_SUBCOMMAND}" != "" ]; then
-    gcActionCommand=${INPUT_GRAVICORE_ACTIONS_SUBCOMMAND}
+  if [ "${INPUT_GRAVICORE_ACTIONS_COMMAND}" != "" ]; then
+    gcActionCommand=${INPUT_GRAVICORE_ACTIONS_COMMAND}
   else
     echo "Input gravicore_actions_command cannot be empty"
     exit 1
