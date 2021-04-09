@@ -44,6 +44,10 @@ function main {
       # installTerragrunt
       reactBuild ${*}
       ;;
+    react-unit-tests)
+      # installTerragrunt
+      reactUnitTests ${*}
+      ;;
     *)
       echo "Error: Must provide a valid value for gravicore_actions_command"
       exit 1
