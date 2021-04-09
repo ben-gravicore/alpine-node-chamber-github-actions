@@ -64,8 +64,7 @@ function reactUnitTests {
 }
 
 function reactPublishS3 {
-  chamber exec $NAMESPACE-$DEPLOYMENT_STAGE -- env
-  echo "chamber exec $NAMESPACE-$DEPLOYMENT_STAGE -- env | grep -e $CHAMBER_S3_CDN_BUCKET_ID"
+
   chamberOutput=$(chamber exec $NAMESPACE-$DEPLOYMENT_STAGE -- env | grep -e $CHAMBER_S3_CDN_BUCKET_ID)
   chamberExitCode=${?}
   # Exit code of 0 indicates success. Print the output and exit.
