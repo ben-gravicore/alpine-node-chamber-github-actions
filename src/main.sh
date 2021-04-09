@@ -20,17 +20,17 @@ function parseInputs {
   if [ "${INPUT_GRAVICORE_ACTIONS_COMMAND}" != "" ]; then
     gcActionCommand=${INPUT_GRAVICORE_ACTIONS_COMMAND}
 
-    if [ "${NAMESPACE}" == ""]; then
+    if [ ${NAMESPACE} == ""]; then
       echo "NAMESPACE must be defined"
       exit 1
     fi
 
-    if [ "${INPUT_GRAVICORE_ACTIONS_COMMAND}" == "react-publish-s3" ] && [ "${CHAMBER_S3_CDN_BUCKET_ID}" == ""]; then
+    if [ ${INPUT_GRAVICORE_ACTIONS_COMMAND} == "react-publish-s3" ] && [ ${CHAMBER_S3_CDN_BUCKET_ID} == ""]; then
       echo "CHAMBER_S3_CDN_BUCKET_ID must be defined when using react-publish-s3"
       exit 1
     fi
 
-    if [ "${INPUT_GRAVICORE_ACTIONS_COMMAND}" == "react-invalidate-cloudfront" ] && [ "${CHAMBER_S3_CDN_DISTRO_ID}" == ""]; then
+    if [ ${INPUT_GRAVICORE_ACTIONS_COMMAND} == "react-invalidate-cloudfront" ] && [ ${CHAMBER_S3_CDN_DISTRO_ID} == ""]; then
       echo "CHAMBER_S3_CDN_DISTRO_ID must be defined when using react-invalidate-cloudfront"
       exit 1
     fi
