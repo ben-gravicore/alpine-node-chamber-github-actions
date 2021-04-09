@@ -2,6 +2,8 @@ FROM gravicore/alpine-node-chamber:latest
 
 RUN ["/bin/sh", "-c", "apk add --update --no-cache bash ca-certificates curl git jq openssh autoconf automake libtool build-base pkgconfig nasm util-linux"]
 
+ENV GLIBC_VER=2.31-r0
+
 # install glibc compatibility for alpine
 RUN apk --no-cache add \
         binutils \
