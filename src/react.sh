@@ -44,7 +44,7 @@ function reactUnitTests {
   chamberExitCode=${?}
   # Exit code of 0 indicates success. Print the output and exit.
   if [ ${chamberExitCode} -ne 0 ]; then
-    echo "react-build: error: chamber export failed"
+    echo "react-unit-tests: error: chamber export failed"
     echo "${chamberOutput}"
     echo
     exit ${chamberExitCode}
@@ -56,7 +56,7 @@ function reactUnitTests {
   
   # Exit code of 0 indicates success. Print the output and exit.
   if [ ${yarnExitCode} -ne 0 ]; then
-    echo "react-build: error: yarn test"
+    echo "react-unit-tests: error: yarn test"
     echo "${yarnOutput}"
     echo
     exit ${yarnExitCode}
@@ -69,7 +69,7 @@ function reactPublishS3 {
   chamberExitCode=${?}
   # Exit code of 0 indicates success. Print the output and exit.
   if [ ${chamberExitCode} -ne 0 ]; then
-    echo "react-build: error: chamber exec failed"
+    echo "react-publish-s3: error: chamber exec failed"
     echo "${chamberOutput}"
     echo
     exit ${chamberExitCode}
@@ -81,7 +81,7 @@ function reactPublishS3 {
   
   # Exit code of 0 indicates success. Print the output and exit.
   if [ ${awsExitCode} -ne 0 ]; then
-    echo "react-build: error: aws s3 sync build failed"
+    echo "react-publish-s3: error: aws s3 sync build failed"
     echo "${awsOutput}"
     echo
     exit ${awsExitCode}
@@ -94,7 +94,7 @@ function reactInvalidateCloudFront {
   chamberExitCode=${?}
   # Exit code of 0 indicates success. Print the output and exit.
   if [ ${chamberExitCode} -ne 0 ]; then
-    echo "react-build: error: chamber exec failed"
+    echo "react-invalidate-cloudfront: error: chamber exec failed"
     echo "${chamberOutput}"
     echo
     exit ${chamberExitCode}
@@ -106,7 +106,7 @@ function reactInvalidateCloudFront {
   
   # Exit code of 0 indicates success. Print the output and exit.
   if [ ${awsExitCode} -ne 0 ]; then
-    echo "react-build: error: aws cloudfront create-invalidation build failed"
+    echo "react-invalidate-cloudfront: error: aws cloudfront create-invalidation build failed"
     echo "${awsOutput}"
     echo
     exit ${awsExitCode}
