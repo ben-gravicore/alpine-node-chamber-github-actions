@@ -19,6 +19,22 @@ function parseInputs {
   # Required inputs
   if [ "${INPUT_GRAVICORE_ACTIONS_COMMAND}" != "" ]; then
     gcActionCommand=${INPUT_GRAVICORE_ACTIONS_COMMAND}
+
+    if [ "${NAMESPACE}" == ""]; then
+      echo "NAMESPACE must be defined"
+      exit 1
+    fi
+
+    if [ "${INPUT_GRAVICORE_ACTIONS_COMMAND}" == "react-publish-s3" ] && [ "${CHAMBER_S3_CDN_BUCKET_ID}" == ""]; then
+      echo "CHAMBER_S3_CDN_BUCKET_ID must be defined when using react-publish-s3"
+      exit 1
+    fi
+
+    if [ "${INPUT_GRAVICORE_ACTIONS_COMMAND}" == "react-invalidate-cloudfront" ] && [ "${CHAMBER_S3_CDN_DISTRO_ID}" == ""]; then
+      echo "CHAMBER_S3_CDN_DISTRO_ID must be defined when using react-invalidate-cloudfront"
+      exit 1
+    fi
+
   else
     echo "Input gravicore_actions_command cannot be empty"
     exit 1
@@ -47,6 +63,14 @@ function main {
     react-unit-tests)
       # installTerragrunt
       reactUnitTests ${*}
+      ;;
+    react-publish-s3)
+      # installTerragrunt
+      reactPublishS3 ${*}
+      ;;
+    react-invalidate-cloudfront)
+      # installTerragrunt
+      reactInvalidateCloudFront ${*}
       ;;
     *)
       echo "Error: Must provide a valid value for gravicore_actions_command"

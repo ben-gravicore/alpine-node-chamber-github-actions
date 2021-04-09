@@ -2,7 +2,7 @@
 
 function reactBuild {
 
-  chamberOutput=$(chamber export cel-borrower-$DEPLOYMENT_STAGE -f dotenv | grep -e AWS_REGION -e ADMIN_COGNITO_USER_POOL_ID -e ADMIN_COGNITO_CLIENT_ID -e ADMIN_COGNITO_IDENTITY_POOL_ID -e ADMIN_COGNITO_DOMAIN_NAME -e ADMIN_APPSYNC_URIS -e ADMIN_DATADOG_RUM_CLIENT_TOKEN -e ADMIN_DATADOG_RUM_APPLICATION_ID > .env)
+  chamberOutput=$(chamber export $NAMESPACE-$DEPLOYMENT_STAGE -f dotenv | grep -e AWS_REGION -e ADMIN_COGNITO_USER_POOL_ID -e ADMIN_COGNITO_CLIENT_ID -e ADMIN_COGNITO_IDENTITY_POOL_ID -e ADMIN_COGNITO_DOMAIN_NAME -e ADMIN_APPSYNC_URIS -e ADMIN_DATADOG_RUM_CLIENT_TOKEN -e ADMIN_DATADOG_RUM_APPLICATION_ID > .env)
   chamberExitCode=${?}
   # Exit code of 0 indicates success. Print the output and exit.
   if [ ${chamberExitCode} -ne 0 ]; then
@@ -38,10 +38,9 @@ function reactBuild {
   exit ${yarnExitCode}
 }
 
-
 function reactUnitTests {
 
-  chamberOutput=$(chamber export cel-borrower-$DEPLOYMENT_STAGE -f dotenv | grep -e AWS_REGION -e ADMIN_COGNITO_USER_POOL_ID -e ADMIN_COGNITO_CLIENT_ID -e ADMIN_COGNITO_IDENTITY_POOL_ID -e ADMIN_COGNITO_DOMAIN_NAME -e ADMIN_APPSYNC_URIS -e ADMIN_DATADOG_RUM_CLIENT_TOKEN -e ADMIN_DATADOG_RUM_APPLICATION_ID > .env)
+  chamberOutput=$(chamber export $NAMESPACE-$DEPLOYMENT_STAGE -f dotenv | grep -e AWS_REGION -e ADMIN_COGNITO_USER_POOL_ID -e ADMIN_COGNITO_CLIENT_ID -e ADMIN_COGNITO_IDENTITY_POOL_ID -e ADMIN_COGNITO_DOMAIN_NAME -e ADMIN_APPSYNC_URIS -e ADMIN_DATADOG_RUM_CLIENT_TOKEN -e ADMIN_DATADOG_RUM_APPLICATION_ID > .env)
   chamberExitCode=${?}
   # Exit code of 0 indicates success. Print the output and exit.
   if [ ${chamberExitCode} -ne 0 ]; then
@@ -61,5 +60,55 @@ function reactUnitTests {
     echo "${yarnOutput}"
     echo
     exit ${yarnExitCode}
+  fi
+}
+
+function reactPublishS3 {
+
+  chamberOutput=$(chamber exec $NAMESPACE-$DEPLOYMENT_STAGE -- env | grep -e $CHAMBER_S3_CDN_BUCKET_ID)
+  chamberExitCode=${?}
+  # Exit code of 0 indicates success. Print the output and exit.
+  if [ ${chamberExitCode} -ne 0 ]; then
+    echo "react-build: error: chamber exec failed"
+    echo "${chamberOutput}"
+    echo
+    exit ${chamberExitCode}
+  fi
+  export ${chamberOutput}
+
+  awsOutput=$(aws s3 sync build s3://$CHAMBER_S3_CDN_BUCKET_ID/ --acl "public-read" --delete)
+  awsExitCode=${?}
+  
+  # Exit code of 0 indicates success. Print the output and exit.
+  if [ ${awsExitCode} -ne 0 ]; then
+    echo "react-build: error: aws s3 sync build failed"
+    echo "${awsOutput}"
+    echo
+    exit ${awsExitCode}
+  fi
+}
+
+function reactInvalidateCloudFront {
+
+  chamberOutput=$(chamber exec $NAMESPACE-$DEPLOYMENT_STAGE -- env | grep -e $CHAMBER_S3_CDN_DISTRO_ID)
+  chamberExitCode=${?}
+  # Exit code of 0 indicates success. Print the output and exit.
+  if [ ${chamberExitCode} -ne 0 ]; then
+    echo "react-build: error: chamber exec failed"
+    echo "${chamberOutput}"
+    echo
+    exit ${chamberExitCode}
+  fi
+  export ${chamberOutput}
+
+  awsOutput=$(aws cloudfront create-invalidation --distribution-id $CHAMBER_S3_CDN_DISTRO_ID --paths "/*")
+  awsExitCode=${?}
+  
+  # Exit code of 0 indicates success. Print the output and exit.
+  if [ ${awsExitCode} -ne 0 ]; then
+    echo "react-build: error: aws cloudfront create-invalidation build failed"
+    echo "${awsOutput}"
+    echo
+    exit ${awsExitCode}
   fi
 }
