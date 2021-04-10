@@ -102,6 +102,8 @@ function reactInvalidateCloudFront {
   fi
   export ${chamberOutput}
   export CHAMBER_S3_CDN_DISTRO_ID=`printenv ${CHAMBER_S3_CDN_DISTRO_ID}`
+  echo $CHAMBER_S3_CDN_DISTRO_ID
+  echo 'aws cloudfront create-invalidation --distribution-id $CHAMBER_S3_CDN_DISTRO_ID --paths "/*"'
 
   awsOutput=$(aws cloudfront create-invalidation --distribution-id $CHAMBER_S3_CDN_DISTRO_ID --paths "/*")
   awsExitCode=${?}
