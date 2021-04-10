@@ -75,6 +75,7 @@ function reactPublishS3 {
     exit ${chamberExitCode}
   fi
   export ${chamberOutput}
+  export CHAMBER_S3_CDN_BUCKET_ID=`printenv ${CHAMBER_S3_CDN_BUCKET_ID}`
 
   awsOutput=$(aws s3 sync build s3://$CHAMBER_S3_CDN_BUCKET_ID/ --acl "public-read" --delete)
   awsExitCode=${?}
@@ -100,6 +101,7 @@ function reactInvalidateCloudFront {
     exit ${chamberExitCode}
   fi
   export ${chamberOutput}
+  export CHAMBER_S3_CDN_DISTRO_ID=`printenv ${CHAMBER_S3_CDN_DISTRO_ID}`
 
   awsOutput=$(aws cloudfront create-invalidation --distribution-id $CHAMBER_S3_CDN_DISTRO_ID --paths "/*")
   awsExitCode=${?}
