@@ -76,7 +76,6 @@ function reactPublishS3 {
   fi
   export ${chamberOutput}
   export CHAMBER_S3_CDN_BUCKET_ID=`printenv ${CHAMBER_S3_CDN_BUCKET_ID}`
-  ls -a -l /github/workspace
 
   awsOutput=$(aws s3 sync ${BUILD_DIR} s3://${CHAMBER_S3_CDN_BUCKET_ID}/ --acl "public-read" --delete)
   awsExitCode=${?}
