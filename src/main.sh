@@ -25,8 +25,8 @@ function parseInputs {
       exit 1
     fi
 
-    if [ ${INPUT_GRAVICORE_ACTIONS_COMMAND} == "react-publish-s3" ] && [ -z "${CHAMBER_S3_CDN_BUCKET_ID}" ]; then
-      echo "CHAMBER_S3_CDN_BUCKET_ID must be defined when using react-publish-s3"
+    if [ ${INPUT_GRAVICORE_ACTIONS_COMMAND} == "react-publish-s3" ] && ([ -z "${CHAMBER_S3_CDN_BUCKET_ID}" ] || [ -z "${BUILD_DIR}" ]); then
+      echo "CHAMBER_S3_CDN_BUCKET_ID and BUILD_DIR must be defined when using react-publish-s3"
       exit 1
     fi
 
