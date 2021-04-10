@@ -65,6 +65,7 @@ function reactUnitTests {
 
 function reactPublishS3 {
 
+  echo $CHAMBER_S3_CDN_BUCKET_ID
   chamberOutput=$(chamber exec $NAMESPACE-$DEPLOYMENT_STAGE -- env | grep -e $CHAMBER_S3_CDN_BUCKET_ID)
   chamberExitCode=${?}
   # Exit code of 0 indicates success. Print the output and exit.
@@ -74,8 +75,11 @@ function reactPublishS3 {
     echo
     exit ${chamberExitCode}
   fi
+  echo $chamberOutput
   export ${chamberOutput}
   export CHAMBER_S3_CDN_BUCKET_ID=`printenv ${CHAMBER_S3_CDN_BUCKET_ID}`
+  echo $CHAMBER_S3_CDN_BUCKET_ID
+  echo "aws s3 sync build s3://$CHAMBER_S3_CDN_BUCKET_ID/ --acl "public-read" --delete"
 
   awsOutput=$(aws s3 sync build s3://$CHAMBER_S3_CDN_BUCKET_ID/ --acl "public-read" --delete)
   awsExitCode=${?}
@@ -102,8 +106,6 @@ function reactInvalidateCloudFront {
   fi
   export ${chamberOutput}
   export CHAMBER_S3_CDN_DISTRO_ID=`printenv ${CHAMBER_S3_CDN_DISTRO_ID}`
-  echo $CHAMBER_S3_CDN_DISTRO_ID
-  echo 'aws cloudfront create-invalidation --distribution-id $CHAMBER_S3_CDN_DISTRO_ID --paths "/*"'
 
   awsOutput=$(aws cloudfront create-invalidation --distribution-id $CHAMBER_S3_CDN_DISTRO_ID --paths "/*")
   awsExitCode=${?}
