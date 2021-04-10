@@ -109,7 +109,7 @@ function reactInvalidateCloudFront {
   
   # Exit code of 0 indicates success. Print the output and exit.
   if [ ${awsExitCode} -ne 0 ]; then
-    echo "react-invalidate-cloudfront: error: aws cloudfront create-invalidation build failed"
+    echo "react-invalidate-cloudfront: error: aws cloudfront create-invalidation failed"
     echo "${awsOutput}"
     echo
     exit ${awsExitCode}
