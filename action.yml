@@ -12,4 +12,4 @@ inputs:
     description: 'GitHub actions workflow path'
 runs:
   using: 'docker'
-  image: ${{ inputs.gravicore_actions_path }} '/Dockerfile'
+  image: ${{ inputs.actions_path }} '/Dockerfile'
