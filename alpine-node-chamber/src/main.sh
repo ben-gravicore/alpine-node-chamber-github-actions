@@ -17,26 +17,26 @@ function hasPrefix {
 
 function parseInputs {
   # Required inputs
-  if [ "${INPUT_GRAVICORE_ACTIONS_COMMAND}" != "" ]; then
-    gcActionCommand=${INPUT_GRAVICORE_ACTIONS_COMMAND}
+  if [ "${INPUT_ACTIONS_COMMAND}" != "" ]; then
+    gcActionCommand=${INPUT_ACTIONS_COMMAND}
 
     if [ -z "${NAMESPACE}" ]; then
       echo "NAMESPACE must be defined"
       exit 1
     fi
 
-    if [ ${INPUT_GRAVICORE_ACTIONS_COMMAND} == "react-publish-s3" ] && ([ -z "${CHAMBER_S3_CDN_BUCKET_ID}" ] || [ -z "${BUILD_DIR}" ]); then
+    if [ ${INPUT_ACTIONS_COMMAND} == "react-publish-s3" ] && ([ -z "${CHAMBER_S3_CDN_BUCKET_ID}" ] || [ -z "${BUILD_DIR}" ]); then
       echo "CHAMBER_S3_CDN_BUCKET_ID and BUILD_DIR must be defined when using react-publish-s3"
       exit 1
     fi
 
-    if [ ${INPUT_GRAVICORE_ACTIONS_COMMAND} == "react-invalidate-cloudfront" ] && [ -z "${CHAMBER_S3_CDN_DISTRO_ID}" ]; then
+    if [ ${INPUT_ACTIONS_COMMAND} == "react-invalidate-cloudfront" ] && [ -z "${CHAMBER_S3_CDN_DISTRO_ID}" ]; then
       echo "CHAMBER_S3_CDN_DISTRO_ID must be defined when using react-invalidate-cloudfront"
       exit 1
     fi
 
   else
-    echo "Input gravicore_actions_command cannot be empty"
+    echo "Input actions_command cannot be empty"
     exit 1
   fi
 
@@ -73,7 +73,7 @@ function main {
       reactInvalidateCloudFront ${*}
       ;;
     *)
-      echo "Error: Must provide a valid value for gravicore_actions_command"
+      echo "Error: Must provide a valid value for actions_command"
       exit 1
       ;;
   esac

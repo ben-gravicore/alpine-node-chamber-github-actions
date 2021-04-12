@@ -8,9 +8,6 @@ inputs:
   actions_command:
     description: 'GitHub actions commands to execute'
     required: true
-  actions_path:
-    description: 'GitHub actions workflow path'
-    required: true
 runs:
   using: 'docker'
   image: './Dockerfile'
