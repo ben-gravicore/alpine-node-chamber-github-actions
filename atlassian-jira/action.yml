@@ -1,0 +1,7 @@
+name: 'Jira Get Issue Keys'
+description: 'Get Jira Issue Keys From Pipeline'
+runs:
+  using: "composite"
+  steps: 
+    - run: ${{ github.action_path }}/jira.sh
+      shell: bash
